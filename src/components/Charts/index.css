@@ -10,8 +10,16 @@
 
 h1 {
   color: white;
-  font-family: "Lucida Sans";
+  font-family: Arial;
   margin-left: 20px;
+  position: relative;
+}
+
+.span-text {
+  position: relative;
+  top: -20px;
+  font-weight: bold;
+  font-size: 15px;
 }
 
 .header {

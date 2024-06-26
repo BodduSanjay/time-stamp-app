@@ -10,11 +10,10 @@ import {
   ResponsiveContainer,
   Brush,
 } from "recharts";
-import axios from "axios";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import dayjs from "dayjs";
 import ButtonItem from "../ButtonItem";
-
 import "./index.css";
 
 const buttonslist = [
@@ -43,12 +42,13 @@ const buttonslist = [
 const Chart = () => {
   const [data, setData] = useState([]);
   const [timeframe, setTimeframe] = useState("daily");
-  const [activeId, setActiveId] = useState("");
+  const [activeId, setActiveId] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios("/data.json");
-      setData(result.data);
+      const response = await fetch("/data.json");
+      const result = await response.json();
+      setData(result);
     };
     fetchData();
   }, []);
@@ -62,53 +62,58 @@ const Chart = () => {
     });
   };
 
-  const filteredData = data.filter((item) => {
-    return true;
-  });
-
   const timeFrameButton = (msg, id) => {
     if (msg === "pdf") {
       exportChart();
-      setActiveId(id);
+    } else {
+      setTimeframe(msg);
     }
-    setTimeframe(msg);
     setActiveId(id);
+  };
+
+  const filteredData = () => {
+    if (timeframe === "daily") {
+      return data.filter((item, index) => index % 1 === 0);
+    } else if (timeframe === "weekly") {
+      return data.filter((item, index) => index % 7 === 0);
+    } else if (timeframe === "monthly") {
+      return data.filter((item, index) => dayjs(item.timestamp).date() === 1);
+    }
+    return data;
   };
 
   return (
     <div className="bg-container">
       <div className="header">
-        <h1>ChartinGo</h1>
+        <h1>
+          Chartin<span className="span-text">Go</span>
+        </h1>
         <div className="buttons-container medium-cont">
-          {buttonslist.map((each) => {
-            return (
-              <ButtonItem
-                each={each}
-                key={each.id}
-                isActive={each.id === activeId}
-                timeFrameButton={timeFrameButton}
-              />
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="buttons-container small-cont">
-        {buttonslist.map((each) => {
-          return (
+          {buttonslist.map((each) => (
             <ButtonItem
               each={each}
               key={each.id}
               isActive={each.id === activeId}
               timeFrameButton={timeFrameButton}
             />
-          );
-        })}
+          ))}
+        </div>
+      </div>
+
+      <div className="buttons-container small-cont">
+        {buttonslist.map((each) => (
+          <ButtonItem
+            each={each}
+            key={each.id}
+            isActive={each.id === activeId}
+            timeFrameButton={timeFrameButton}
+          />
+        ))}
       </div>
 
       <div className="responsive-cont">
         <ResponsiveContainer width="100%" height={500}>
-          <LineChart data={filteredData}>
+          <LineChart data={filteredData()}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="timestamp" />
             <YAxis />
