@@ -48,9 +48,7 @@ const Chart = () => {
     const fetchData = async () => {
       const response = await fetch("/data.json");
       const result = await response.json();
-      if (response.ok) {
-        setData(result);
-      }
+      setData(result);
     };
     fetchData();
   }, []);
@@ -87,7 +85,9 @@ const Chart = () => {
   return (
     <div className="bg-container">
       <div className="header">
-        <h1>ChartinGo</h1>
+        <h1>
+          Chartin<span className="span-text">Go</span>
+        </h1>
         <div className="buttons-container medium-cont">
           {buttonslist.map((each) => (
             <ButtonItem
