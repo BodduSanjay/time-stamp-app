@@ -42,8 +42,8 @@ const buttonslist = [
 
 const Chart = () => {
   const [data, setData] = useState([]);
-  const [timeframe, setTimeframe] = useState("");
-  const [activeId, setActiveId] = useState("");
+  const [timeframe, setTimeframe] = useState("daily");
+  const [activeId, setActiveId] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
