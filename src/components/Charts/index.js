@@ -39,8 +39,7 @@ const Chart = () => {
   };
 
   const filteredData = data.filter((item) => {
-    // Apply timeframe filtering logic here
-    return true; // Placeholder for filtering logic
+    return true;
   });
 
   return (
