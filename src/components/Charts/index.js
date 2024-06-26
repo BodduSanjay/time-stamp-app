@@ -48,7 +48,9 @@ const Chart = () => {
     const fetchData = async () => {
       const response = await fetch("/data.json");
       const result = await response.json();
-      setData(result);
+      if (response.ok) {
+        setData(result);
+      }
     };
     fetchData();
   }, []);
