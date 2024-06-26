@@ -1,13 +1,12 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Charts from "./components/Charts";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
+const App = () => (
+  <div className="App">
     <h1>Charting Application</h1>
-    <Chart />
+    <Charts />
   </div>
 );
-}
 
 export default App;
