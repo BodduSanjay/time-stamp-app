@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import axios from "axios";
 import dayjs from "dayjs";
 import ButtonItem from "../ButtonItem";
 import "./index.css";
@@ -46,9 +47,13 @@ const Chart = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("/data.json");
-      const result = await response.json();
-      setData(result);
+      try {
+        const response = await axios.get("/data.json");
+        console.log("Fetched data:", response.data);
+        setData(response.data);
+      } catch (error) {
+        console.error("Fetch error:", error);
+      }
     };
     fetchData();
   }, []);
