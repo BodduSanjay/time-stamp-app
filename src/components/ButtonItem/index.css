@@ -1,0 +1,23 @@
+.active-button {
+  height: 40px;
+  width: 120px;
+  background-color: transparent;
+  color: white;
+  border: none;
+  border-bottom: solid white;
+  outline: none;
+  margin: 10px;
+  transition: all 0.1s ease-in;
+  cursor: pointer;
+}
+
+.normal-button {
+  height: 40px;
+  width: 120px;
+  background-color: transparent;
+  color: white;
+  outline: none;
+  border: none;
+  margin: 10px;
+  cursor: pointer;
+}

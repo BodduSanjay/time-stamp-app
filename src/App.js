@@ -4,7 +4,6 @@ import "./App.css";
 
 const App = () => (
   <div className="App">
-    <h1>Charting Application</h1>
     <Charts />
   </div>
 );

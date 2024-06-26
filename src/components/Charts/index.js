@@ -8,14 +8,42 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  Brush,
 } from "recharts";
 import axios from "axios";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import ButtonItem from "../ButtonItem";
+
+import "./index.css";
+
+const buttonslist = [
+  {
+    displayText: "Daily",
+    msg: "daily",
+    id: 0,
+  },
+  {
+    displayText: "Weekly",
+    msg: "weekly",
+    id: 1,
+  },
+  {
+    displayText: "Monthly",
+    msg: "monthly",
+    id: 2,
+  },
+  {
+    displayText: "Export as PDF",
+    msg: "pdf",
+    id: 3,
+  },
+];
 
 const Chart = () => {
   const [data, setData] = useState([]);
   const [timeframe, setTimeframe] = useState("daily");
+  const [activeId, setActiveId] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,10 +52,6 @@ const Chart = () => {
     };
     fetchData();
   }, []);
-
-  const handleClick = (data) => {
-    alert(`Value: ${data.value}`);
-  };
 
   const exportChart = () => {
     html2canvas(document.querySelector(".recharts-wrapper")).then((canvas) => {
@@ -42,24 +66,59 @@ const Chart = () => {
     return true;
   });
 
+  const timeFrameButton = (msg, id) => {
+    if (msg === "pdf") {
+      exportChart();
+      setActiveId(id);
+    }
+    setTimeframe(msg);
+    setActiveId(id);
+  };
+
   return (
-    <div>
-      <div>
-        <button onClick={() => setTimeframe("daily")}>Daily</button>
-        <button onClick={() => setTimeframe("weekly")}>Weekly</button>
-        <button onClick={() => setTimeframe("monthly")}>Monthly</button>
-        <button onClick={exportChart}>Export as PDF</button>
+    <div className="bg-container">
+      <div className="header">
+        <h1>ChartinGo</h1>
+        <div className="buttons-container medium-cont">
+          {buttonslist.map((each) => {
+            return (
+              <ButtonItem
+                each={each}
+                key={each.id}
+                isActive={each.id === activeId}
+                timeFrameButton={timeFrameButton}
+              />
+            );
+          })}
+        </div>
       </div>
-      <ResponsiveContainer width="100%" height={400}>
-        <LineChart data={filteredData} onClick={handleClick}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="timestamp" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="value" stroke="#8884d8" />
-        </LineChart>
-      </ResponsiveContainer>
+
+      <div className="buttons-container small-cont">
+        {buttonslist.map((each) => {
+          return (
+            <ButtonItem
+              each={each}
+              key={each.id}
+              isActive={each.id === activeId}
+              timeFrameButton={timeFrameButton}
+            />
+          );
+        })}
+      </div>
+
+      <div className="responsive-cont">
+        <ResponsiveContainer width="100%" height={500}>
+          <LineChart data={filteredData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="timestamp" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="value" stroke="#8884d8" />
+            <Brush dataKey="timestamp" height={30} stroke="#8884d8" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };
