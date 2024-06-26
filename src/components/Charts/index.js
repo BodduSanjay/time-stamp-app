@@ -10,6 +10,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import axios from "axios";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const Chart = () => {
   const [data, setData] = useState([]);
@@ -27,6 +29,15 @@ const Chart = () => {
     alert(`Value: ${data.value}`);
   };
 
+  const exportChart = () => {
+    html2canvas(document.querySelector(".recharts-wrapper")).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, "PNG", 0, 0);
+      pdf.save("chart.pdf");
+    });
+  };
+
   const filteredData = data.filter((item) => {
     // Apply timeframe filtering logic here
     return true; // Placeholder for filtering logic
@@ -38,6 +49,7 @@ const Chart = () => {
         <button onClick={() => setTimeframe("daily")}>Daily</button>
         <button onClick={() => setTimeframe("weekly")}>Weekly</button>
         <button onClick={() => setTimeframe("monthly")}>Monthly</button>
+        <button onClick={exportChart}>Export as PDF</button>
       </div>
       <ResponsiveContainer width="100%" height={400}>
         <LineChart data={filteredData} onClick={handleClick}>
@@ -54,22 +66,3 @@ const Chart = () => {
 };
 
 export default Chart;
-
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-
-const exportChart = () => {
-  html2canvas(document.querySelector(".recharts-wrapper")).then((canvas) => {
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF();
-    pdf.addImage(imgData, "PNG", 0, 0);
-    pdf.save("chart.pdf");
-  });
-};
-
-return (
-  <div>
-    {/* Other UI elements */}
-    <button onClick={exportChart}>Export as PDF</button>
-  </div>
-);
