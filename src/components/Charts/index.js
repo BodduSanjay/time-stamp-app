@@ -41,8 +41,8 @@ const buttonslist = [
 
 const Chart = () => {
   const [data, setData] = useState([]);
-  const [timeframe, setTimeframe] = useState("daily");
-  const [activeId, setActiveId] = useState(0);
+  const [timeframe, setTimeframe] = useState("");
+  const [activeId, setActiveId] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,9 +85,7 @@ const Chart = () => {
   return (
     <div className="bg-container">
       <div className="header">
-        <h1>
-          Chartin<span className="span-text">Go</span>
-        </h1>
+        <h1>ChartinGo</h1>
         <div className="buttons-container medium-cont">
           {buttonslist.map((each) => (
             <ButtonItem
